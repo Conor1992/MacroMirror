@@ -83,19 +83,24 @@ selected_groups = st.sidebar.multiselect(
 st.title("📊 MacroMirror — US Macro Analogue Finder")
 st.write("A macro‑analytics dashboard that compares today’s environment to history and generates AI‑powered summaries.")
 
-
 # ---------------------------------------------------
-# STOP IF KEYS MISSING
+# RUN BUTTON LOGIC
 # ---------------------------------------------------
 
 if not run_button:
+    st.info("Set your API keys and options in the sidebar, then click **Run Analysis**.")
     st.stop()
 
-if not fred_api_key or not openai_api_key:
-    st.error("Please enter both your FRED and OpenAI API keys.")
+if not fred_api_key:
+    st.error("Please enter your FRED API key.")
+    st.stop()
+
+if not openai_api_key:
+    st.error("Please enter your OpenAI API key.")
     st.stop()
 
 openai.api_key = openai_api_key
+
 
 
 # ---------------------------------------------------

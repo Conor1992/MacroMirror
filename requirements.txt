@@ -6,4 +6,3 @@ yfinance
 matplotlib
 scikit-learn
 fastdtw
-openai

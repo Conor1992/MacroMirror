@@ -177,12 +177,25 @@ yahoo_data = reduce(lambda l, r: pd.merge(l, r, on="date", how="outer"), yahoo_d
 
 
 # ---------------------------------------------------
-# MERGE ALL DATA
+# MERGE + PREPROCESSING
 # ---------------------------------------------------
 
 macro_full = pd.merge(macro_fred, yahoo_data, on="date", how="outer")
 macro_full.sort_values("date", inplace=True)
 macro_full.set_index("date", inplace=True)
+
+# PREPROCESSING PIPELINE
+# 1. Drop columns with >50% NaNs
+macro_full = macro_full.loc[:, macro_full.isna().mean() < 0.5]
+
+# 2. Forward-fill then back-fill
+macro_full = macro_full.ffill().bfill()
+
+# 3. Drop any remaining all-NaN rows
+macro_full = macro_full.dropna(how="all")
+
+# 4. Ensure numeric dtype
+macro_full = macro_full.apply(pd.to_numeric, errors="coerce")
 
 
 # ---------------------------------------------------
